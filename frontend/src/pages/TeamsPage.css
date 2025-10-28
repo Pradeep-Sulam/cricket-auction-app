@@ -1,0 +1,51 @@
+.teams-page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.teams-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+.teams-container h1 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #1e3a8a;
+  text-align: center;
+}
+
+/*.teams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}*/
+
+.teams-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* exactly four columns */
+  gap: 20px;
+  justify-items: center;  /* optional: centers the panels in their cells */
+  align-items: start;     /* keeps tops aligned */
+}
+
+.no-teams {
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.no-teams p {
+  font-size: 1.1rem;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .teams-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

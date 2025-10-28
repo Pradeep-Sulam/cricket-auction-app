@@ -1,0 +1,80 @@
+.auction-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bid-increment-control {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bid-increment-control label {
+  font-weight: 500;
+  color: #333;
+}
+
+.bid-increment-control input {
+  padding: 10px;
+  border: 2px solid #e5e7eb;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.bid-increment-control input:focus {
+  border-color: #1e3a8a;
+  outline: none;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-sold,
+.btn-undo {
+  flex: 1;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-sold {
+  background: #059669;
+  color: white;
+}
+
+.btn-sold:hover:not(:disabled) {
+  background: #047857;
+  transform: scale(1.02);
+}
+
+.btn-sold:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.btn-undo {
+  background: #dc2626;
+  color: white;
+}
+
+.btn-undo:hover:not(:disabled) {
+  background: #b91c1c;
+  transform: scale(1.02);
+}
+
+.btn-undo:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+

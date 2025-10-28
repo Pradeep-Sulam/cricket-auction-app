@@ -13,19 +13,36 @@ A full-stack web application for managing cricket player auctions with real-time
 
 ## Tech Stack
 
-- **Backend**: FastAPI, SQLAlchemy, SQLite
+- **Backend**: FastAPI, SQLAlchemy, Postgres
 - **Frontend**: React, React Router, Axios
 - **Styling**: CSS3 with responsive design
+- **Deployment**: Docker, Docker Compose, Nginx
 
 ## Getting Started
 
-### Prerequisites
+### Option 1: Quick Start with Docker 🐳 (Recommended)
+
+The easiest way to run the application:
+
+```bash
+docker compose up --build
+```
+
+Then access:
+- Frontend: http://localhost:3000
+- Backend: http://localhost:8000
+
+See [QUICK_START_DOCKER.md](QUICK_START_DOCKER.md) for details.
+
+### Option 2: Manual Installation
+
+#### Prerequisites
 
 - Python 3.8 or higher
 - Node.js 14 or higher
 - npm or yarn
 
-### Installation
+#### Installation
 
 1. **Clone the repository** (or navigate to the project directory)
 
