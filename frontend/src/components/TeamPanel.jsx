@@ -50,9 +50,10 @@ function TeamPanel({ team, isEditing, onEdit, onSave, onCancel, editData, setEdi
                 </p>
                 <p className="stat-item">
                   <span className="stat-label">Remaining:</span>
-                  <span className="stat-value remaining">
+				  <span className="stat-value">${team.budget}</span>
+					  {/*<span className="stat-value remaining">
                     ${team.budget - team.players.reduce((sum, p) => sum + (p.points_spent || 0), 0)}
-                  </span>
+					  </span>*/}
                 </p>
               </>
             )}

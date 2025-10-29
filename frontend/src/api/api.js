@@ -52,6 +52,7 @@ export const auctionAPI = {
   getNextPlayer: () => api.get('/auction/next-player'),
   sellPlayer: (data) => api.post('/auction/sell-player', data),
   undoLastAction: () => api.post('/auction/undo'),
+  markPlayerUnsold: (playerId) => api.post(`/auction/unsold/${playerId}`),
 };
 
 // Download API

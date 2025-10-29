@@ -91,7 +91,22 @@ function AuctionPage() {
       alert(error.response?.data?.detail || 'Failed to undo');
     }
   };
-
+  const handleUnsold = async () => {
+    try {
+      // Call your API or logic to mark player as unsold
+      await auctionAPI.markPlayerUnsold(player.id);
+  
+      alert(`⚠️ ${player.name} marked as unsold!`);
+  
+      // Reset bids and fetch next player
+      setBids(teams.reduce((acc, team) => ({ ...acc, [team.name]: 0 }), {}));
+      fetchNextPlayer();
+    } catch (error) {
+      console.error('Error marking player as unsold:', error);
+      alert(error.response?.data?.detail || 'Failed to mark player as unsold');
+    }
+  };
+  
   if (!player) {
     return (
       <div className="auction-page">
@@ -142,6 +157,13 @@ function AuctionPage() {
               onUndo={handleUndo}
               disabled={loading}
             />
+            <button
+              onClick={handleUnsold}
+              className="btn-unsold"
+              disabled={loading}
+            >
+              Unsold
+            </button>
           </div>
         </div>
       </div>

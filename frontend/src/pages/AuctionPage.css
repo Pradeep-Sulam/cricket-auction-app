@@ -70,6 +70,23 @@
   align-items: start;
 }
 
+.btn-unsold {
+  background-color: #f0ad4e; /* orange */
+  color: white;
+  border: none;
+  padding: 10px 30px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-left: 10px;
+}
+
+.btn-unsold:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
 .team-bid-box {
   background: white;
   padding: 20px;

@@ -5,6 +5,7 @@ from app.models import Player, Team, PlayerResponse
 from app.crud import get_unsold_players
 from pydantic import BaseModel
 from typing import Optional
+from sqlalchemy.sql.expression import func
 
 router = APIRouter()
 
@@ -28,12 +29,11 @@ def get_db():
 
 @router.get("/next-player", response_model=PlayerResponse)
 def next_player(db: Session = Depends(get_db)):
-    """Get next unsold player for auction"""
-    players = get_unsold_players(db)
-    if not players:
+    """Get a random unsold player for auction"""
+    player = db.query(Player).filter(Player.team_id == None).order_by(func.random()).first()
+    if not player:
         raise HTTPException(status_code=404, detail="No unsold players")
     
-    player = players[0]
     auction_state["current_player_id"] = player.id
     return PlayerResponse.model_validate(player)
 
@@ -108,3 +108,19 @@ def undo(db: Session = Depends(get_db)):
     auction_state["current_player_id"] = player.id
     
     return {"status": "undo successful", "player": player.name}
+
+@router.post("/unsold/{player_id}")
+def mark_unsold(player_id: int, db: Session = Depends(get_db)):
+    """Mark current player as unsold"""
+    # Ensure current auction player matches
+    if auction_state["current_player_id"] != player_id:
+        raise HTTPException(status_code=400, detail="Invalid player or no player active")
+
+    player = db.query(Player).filter(Player.id == player_id).first()
+    if not player:
+        raise HTTPException(status_code=404, detail="Player not found")
+
+    # Just clear current player and keep them unsold (team_id stays None)
+    auction_state["current_player_id"] = None
+
+    return {"status": "unsold", "player": player.name}
