@@ -11,6 +11,7 @@ function AuctionPage() {
   const [bidIncrement, setBidIncrement] = useState(100);
   const [bids, setBids] = useState({});
   const [loading, setLoading] = useState(false);
+  const [playerResolved, setPlayerResolved] = useState(true); // ✅ Track if player is sold/unsold
 
   useEffect(() => {
     fetchTeams();
@@ -20,6 +21,7 @@ function AuctionPage() {
     try {
       const response = await teamsAPI.getTeams();
       setTeams(response.data);
+
       // Initialize bids for each team
       const initialBids = {};
       response.data.forEach(team => {
@@ -36,12 +38,14 @@ function AuctionPage() {
     try {
       const response = await auctionAPI.getNextPlayer();
       setPlayer(response.data);
+
       // Reset bids for new player
       const resetBids = {};
       teams.forEach(team => {
         resetBids[team.name] = 0;
       });
       setBids(resetBids);
+      setPlayerResolved(false); // ✅ Now we have a new active player
     } catch (error) {
       console.error('Error fetching player:', error);
       alert(error.response?.data?.detail || 'No more players available');
@@ -58,7 +62,9 @@ function AuctionPage() {
   };
 
   const handleSold = async () => {
-    const highestTeam = Object.entries(bids).reduce((a, b) => (a[1] > b[1] ? a : b))[0];
+    const highestTeam = Object.entries(bids).reduce((a, b) =>
+      a[1] > b[1] ? a : b
+    )[0];
     const points = bids[highestTeam];
 
     if (points === 0) {
@@ -70,10 +76,10 @@ function AuctionPage() {
       await auctionAPI.sellPlayer({
         playerId: player.id,
         team: highestTeam,
-        points: points
+        points: points,
       });
       alert(`✅ ${player.name} sold to ${highestTeam} for ${points} points!`);
-      fetchNextPlayer();
+      setPlayerResolved(true); // ✅ Player round completed
     } catch (error) {
       console.error('Error selling player:', error);
       alert(error.response?.data?.detail || 'Failed to sell player');
@@ -87,26 +93,23 @@ function AuctionPage() {
       fetchNextPlayer();
       fetchTeams(); // Refresh teams to show updated budget
     } catch (error) {
-      console.error('Error cubing action:', error);
+      console.error('Error undoing action:', error);
       alert(error.response?.data?.detail || 'Failed to undo');
     }
   };
+
   const handleUnsold = async () => {
     try {
-      // Call your API or logic to mark player as unsold
       await auctionAPI.markPlayerUnsold(player.id);
-  
       alert(`⚠️ ${player.name} marked as unsold!`);
-  
-      // Reset bids and fetch next player
-      setBids(teams.reduce((acc, team) => ({ ...acc, [team.name]: 0 }), {}));
-      fetchNextPlayer();
+      setPlayerResolved(true); // ✅ Allow generating next player
     } catch (error) {
       console.error('Error marking player as unsold:', error);
       alert(error.response?.data?.detail || 'Failed to mark player as unsold');
     }
   };
-  
+
+  // Initial state: before any player is generated
   if (!player) {
     return (
       <div className="auction-page">
@@ -123,6 +126,7 @@ function AuctionPage() {
     );
   }
 
+  // Active auction view
   return (
     <div className="auction-page">
       <Header />
@@ -142,7 +146,7 @@ function AuctionPage() {
                   <button
                     onClick={() => handleBid(team.name)}
                     className="btn-bid"
-                    disabled={team.budget < bids[team.name] + bidIncrement}
+                    disabled={team.budget < bids[team.name] + bidIncrement || playerResolved}
                   >
                     +{bidIncrement}
                   </button>
@@ -155,14 +159,24 @@ function AuctionPage() {
               setBidIncrement={setBidIncrement}
               onSold={handleSold}
               onUndo={handleUndo}
-              disabled={loading}
+              disabled={loading || playerResolved}
             />
+
             <button
               onClick={handleUnsold}
               className="btn-unsold"
-              disabled={loading}
+              disabled={loading || playerResolved}
             >
               Unsold
+            </button>
+
+            {/* 🟩 New: Manual Generate Button */}
+            <button
+              onClick={fetchNextPlayer}
+              className="btn-generate"
+              disabled={!playerResolved || loading}
+            >
+              🎲 Generate Next Player
             </button>
           </div>
         </div>

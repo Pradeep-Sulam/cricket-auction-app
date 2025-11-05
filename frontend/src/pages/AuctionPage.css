@@ -164,3 +164,24 @@
   }
 }
 
+.btn-generate {
+  background-color: #2e7d32;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  margin-top: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  width: 100%;
+}
+
+.btn-generate:hover {
+  background-color: #388e3c;
+}
+
+.btn-generate:disabled {
+  background-color: #9e9e9e;
+  cursor: not-allowed;
+}
